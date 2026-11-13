@@ -1,0 +1,3 @@
+./start.sh            # just run it
+./start.sh --seed     # seed demo data first (safe to repeat, idempotent)
+./start.sh --reset    # wipe and reseed first

@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "module": {
+    "slug": "algorithmique"
+  },
+  "subModule": {
+    "title": "Exemple — Les opérateurs",
+    "description": "Description courte affichée dans la liste des sous-modules.",
+    "order": 10,
+    "estimatedDuration": 40
+  },
+  "lesson": {
+    "title": "Les opérateurs arithmétiques",
+    "content": "## 1. Analyse\n\nOn veut calculer le **reste** d'une division.\n\n## 2. Algorithme\n\n```algorithme\nAlgorithme Reste\nDébut\n  écrire(\"a = \"), lire(a)\n  écrire(\"b = \"), lire(b)\n  écrire(\"Reste = \", a MOD b)\nFin\n```\n\n## 3. Traduction en Python\n\n```python\na = int(input())\nb = int(input())\nprint(a % b)\n```\n\n## À retenir\n\n- `DIV` : quotient entier ; `MOD` : reste.",
+    "videoUrl": ""
+  },
+  "quiz": {
+    "title": "Quiz — Les opérateurs",
+    "passingScore": 60,
+    "maxAttempts": 0,
+    "questions": [
+      {
+        "type": "single",
+        "text": "Que vaut 17 MOD 5 ?",
+        "options": ["1", "2", "3", "4"],
+        "correctAnswers": [1],
+        "explanation": "17 = 5 × 3 + 2.",
+        "points": 1
+      },
+      {
+        "type": "multiple",
+        "text": "Quels opérateurs sont arithmétiques ?",
+        "options": ["+", "MOD", "ET", "DIV"],
+        "correctAnswers": [0, 1, 3],
+        "explanation": "ET est un opérateur logique.",
+        "points": 2
+      },
+      {
+        "type": "boolean",
+        "text": "DIV renvoie le reste de la division.",
+        "correctAnswers": false,
+        "explanation": "DIV renvoie le quotient ; MOD renvoie le reste."
+      },
+      {
+        "type": "short",
+        "text": "Quel opérateur donne le reste d'une division entière ?",
+        "correctAnswers": ["MOD", "mod"],
+        "explanation": "MOD (modulo)."
+      }
+    ]
+  },
+  "exercises": [
+    {
+      "title": "Reste de la division (algorithme)",
+      "type": "algorithme",
+      "difficulty": "facile",
+      "order": 1,
+      "statement": "Écrire l'**algorithme** qui lit deux entiers et affiche le quotient et le reste de leur division.",
+      "starterCode": "Algorithme Division\nDébut\n\nFin\n",
+      "solution": "Algorithme Division\nDébut\n  lire(a), lire(b)\n  écrire(a DIV b, a MOD b)\nFin"
+    },
+    {
+      "title": "Reste de la division (Python)",
+      "type": "python",
+      "difficulty": "facile",
+      "order": 2,
+      "statement": "Lire deux entiers (un par ligne) et afficher le reste de a divisé par b. Utiliser `input()` sans message.",
+      "starterCode": "a = int(input())\nb = int(input())\n",
+      "solution": "a = int(input())\nb = int(input())\nprint(a % b)",
+      "tests": [
+        { "input": "17\n5\n", "expectedOutput": "2" },
+        { "input": "10\n2\n", "expectedOutput": "0" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+/* Liquid Glass Design System — voir 3D_Liquid_Glass_Design_System.md.
+   La couleur/fond de page est pilotée par le thème MUI (theme/index.js,
+   MuiCssBaseline) ; ce fichier ne porte que ce que le thème ne peut pas
+   exprimer : reset minimal, animations, utilitaires, et le calendrier
+   FullCalendar (qui n'est pas un composant MUI). */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+/* Défilement doux : liquide plutôt que saccadé sur les ancres de la landing. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Barre de défilement : sombre par défaut, adaptée en mode clair via
+   [data-theme-mode] (posé sur <html> par ThemeModeContext — hors de portée
+   du thème MUI, qui ne pilote pas le CSS natif du navigateur). */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+:root[data-theme-mode='light'] ::-webkit-scrollbar-thumb {
+  background: rgba(10, 8, 20, 0.15);
+}
+:root[data-theme-mode='light'] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(10, 8, 20, 0.25);
+}
+
+/* Titre en dégradé iridescent (§3.3 du design system). Le point de départ
+   blanc est illisible sur fond clair : variante démarrant sur le violet
+   profond de la palette claire (theme/paletteLight.js). */
+.text-iridescent {
+  background: linear-gradient(135deg, #ffffff 0%, #c8b6ff 40%, #4cc9f0 75%, #f72585 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+:root[data-theme-mode='light'] .text-iridescent {
+  background: linear-gradient(135deg, #5a189a 0%, #7b2cbf 35%, #0b7285 70%, #d6236b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Animations ambiantes (§5.3) — flottement organique des halos décoratifs. */
+@keyframes liquidFloat {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translateY(-18px) rotate(3deg) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes ambientGlowPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Entrée du toast "Niveau supérieur !" (tâche 5.1) — léger effet de rebond. */
+@keyframes levelUpPop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* --- FullCalendar (tâche 3.3) : hors du système de thème MUI, restylé pour
+   suivre le langage visuel Liquid Glass (boutons pilule, groupe segmenté,
+   badge "aujourd'hui", événements arrondis) plutôt qu'un simple recolorage
+   des bordures par défaut de la librairie. Variante claire sous
+   [data-theme-mode='light']. --- */
+.fc {
+  --fc-border-color: rgba(255, 255, 255, 0.1);
+  --fc-page-bg-color: transparent;
+  --fc-neutral-bg-color: rgba(255, 255, 255, 0.04);
+  --fc-list-event-hover-bg-color: rgba(255, 255, 255, 0.06);
+  --fc-today-bg-color: rgba(157, 78, 221, 0.1);
+  --fc-event-border-color: transparent;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.fc .fc-toolbar {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.fc .fc-toolbar-title {
+  color: rgba(255, 255, 255, 0.94);
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+
+/* Boutons pilule, cohérents avec MuiButton (theme/index.js) : verre
+   translucide au repos, dégradé violet→cyan à l'état actif. */
+.fc .fc-button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: capitalize;
+  font-weight: 600;
+  box-shadow: none;
+  padding: 6px 14px;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.fc .fc-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.fc .fc-button:focus {
+  box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.3);
+}
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.85), rgba(76, 201, 240, 0.65));
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(157, 78, 221, 0.35);
+}
+
+/* Un `.fc-button-group` (ex. prev/next, ou le sélecteur de vue) devient une
+   pilule segmentée unique plutôt que 2-3 boutons carrés séparés. */
+.fc .fc-button-group {
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.fc .fc-button-group .fc-button {
+  border-radius: 0;
+  border: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+.fc .fc-button-group .fc-button:last-child {
+  border-right: none;
+}
+.fc .fc-today-button {
+  border-radius: 99px;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 10px 4px;
+}
+
+.fc .fc-daygrid-day-number {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  padding: 6px;
+}
+
+/* Numéro du jour courant : petit badge circulaire en dégradé, comme les
+   calendriers natifs iOS/Google plutôt qu'un simple fond de cellule teinté. */
+.fc .fc-day-today .fc-daygrid-day-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  margin: 4px;
+  border-radius: 99px;
+  background: linear-gradient(135deg, #9d4edd, #4cc9f0);
+  color: #fff;
+  font-weight: 700;
+}
+
+.fc .fc-daygrid-day:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Événements en pilule arrondie avec un léger halo coloré plutôt que la
+   barre rectangulaire par défaut. */
+.fc .fc-daygrid-event,
+.fc .fc-timegrid-event {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  padding: 1px 4px;
+}
+.fc .fc-daygrid-event .fc-event-title,
+.fc .fc-timegrid-event .fc-event-title {
+  font-weight: 600;
+}
+.fc .fc-daygrid-dot-event .fc-daygrid-event-dot {
+  border-width: 5px;
+}
+.fc .fc-list-event:hover td {
+  background: var(--fc-list-event-hover-bg-color);
+}
+
+:root[data-theme-mode='light'] .fc {
+  --fc-border-color: rgba(10, 8, 20, 0.09);
+  --fc-neutral-bg-color: rgba(10, 8, 20, 0.03);
+  --fc-list-event-hover-bg-color: rgba(10, 8, 20, 0.045);
+  --fc-today-bg-color: rgba(123, 44, 191, 0.08);
+  color: rgba(10, 8, 20, 0.75);
+}
+:root[data-theme-mode='light'] .fc .fc-toolbar-title {
+  color: rgba(10, 8, 20, 0.92);
+}
+:root[data-theme-mode='light'] .fc .fc-button {
+  background: rgba(10, 8, 20, 0.04);
+  border-color: rgba(10, 8, 20, 0.14);
+  color: rgba(10, 8, 20, 0.75);
+}
+:root[data-theme-mode='light'] .fc .fc-button:hover {
+  background: rgba(10, 8, 20, 0.08);
+  border-color: rgba(10, 8, 20, 0.24);
+}
+:root[data-theme-mode='light'] .fc .fc-button-group {
+  border-color: rgba(10, 8, 20, 0.14);
+}
+:root[data-theme-mode='light'] .fc .fc-button-group .fc-button {
+  border-right-color: rgba(10, 8, 20, 0.1);
+}
+:root[data-theme-mode='light'] .fc .fc-button-primary:not(:disabled).fc-button-active,
+:root[data-theme-mode='light'] .fc .fc-button-primary:not(:disabled):active {
+  border-color: rgba(10, 8, 20, 0.2);
+}
+:root[data-theme-mode='light'] .fc .fc-col-header-cell-cushion {
+  color: rgba(10, 8, 20, 0.55);
+}
+:root[data-theme-mode='light'] .fc .fc-daygrid-day-number {
+  color: rgba(10, 8, 20, 0.7);
+}
+:root[data-theme-mode='light'] .fc .fc-daygrid-day:hover {
+  background: rgba(10, 8, 20, 0.02);
+}
+:root[data-theme-mode='light'] .fc .fc-daygrid-event,
+:root[data-theme-mode='light'] .fc .fc-timegrid-event {
+  box-shadow: 0 2px 8px rgba(60, 40, 100, 0.15);
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border-color: var(--fc-border-color);
+}
+
+.fc-scrollgrid {
+  border-radius: 16px;
+  overflow: hidden;
+}

@@ -1,0 +1,49 @@
+# Déploiement : docker compose up -d --build
+# Variables à fournir dans un fichier .env à la racine (voir DEPLOYMENT.md).
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/bac_informatique
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET requis}
+      CLIENT_URL: ${CLIENT_URL:?CLIENT_URL requis (URL publique, ex. https://bac.example.tn)}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?}
+      TRUST_PROXY: "1"
+      SMTP_HOST: ${SMTP_HOST:?SMTP_HOST requis}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-Bac Informatique <no-reply@localhost>}
+      CODE_ENGINE: ${CODE_ENGINE:-disabled}
+      PISTON_URL: http://piston:2000
+    volumes:
+      - uploads:/app/server/uploads
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+
+  # Moteur d'exécution Python isolé (optionnel) : docker compose --profile code up -d
+  # Puis installer Python une fois : voir DEPLOYMENT.md §Exécution de code.
+  piston:
+    image: ghcr.io/engineer-man/piston
+    profiles: ["code"]
+    restart: unless-stopped
+    privileged: true
+    tmpfs:
+      - /piston/jobs:exec,uid=1000,gid=1000,mode=711
+    volumes:
+      - piston-packages:/piston/packages
+
+volumes:
+  mongo-data:
+  uploads:
+  piston-packages:

@@ -1,0 +1,18 @@
+module.exports = {
+  User: require('./User'),
+  Module: require('./Module'),
+  SubModule: require('./SubModule'),
+  Lesson: require('./Lesson'),
+  Quiz: require('./Quiz'),
+  Exercise: require('./Exercise'),
+  Progress: require('./Progress'),
+  QuizAttempt: require('./QuizAttempt'),
+  Task: require('./Task'),
+  Note: require('./Note'),
+  Event: require('./Event'),
+  Settings: require('./Settings'),
+  PasswordResetToken: require('./PasswordResetToken'),
+  Badge: require('./Badge'),
+  UserBadge: require('./UserBadge'),
+  Notification: require('./Notification'),
+};
